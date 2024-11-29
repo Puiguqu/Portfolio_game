@@ -31,18 +31,39 @@
   <!-- On-screen touch buttons -->
   <div id="leftButton" class="control-button" style="left: 20px;">&#8592;</div>
   <div id="rightButton" class="control-button" style="left: 100px;">&#8594;</div>
+  <div id="upButton" class="control-button" style="left: 180px;">&#8593;</div>
+  <div id="downButton" class="control-button" style="left: 260px;">&#8595;</div>
   <div id="enterButton" class="control-button" style="right: 20px;">&#x261D;</div>
 
   <script>
-    let leftButton, rightButton, enterButton;
+    let leftButton, rightButton, upButton, downButton, enterButton;
+    let moveInterval;
     
     document.addEventListener("DOMContentLoaded", () => {
       leftButton = document.getElementById("leftButton");
       rightButton = document.getElementById("rightButton");
+      upButton = document.getElementById("upButton");
+      downButton = document.getElementById("downButton");
       enterButton = document.getElementById("enterButton");
 
-      leftButton.addEventListener("touchstart", () => player.move(-5, 0));
-      rightButton.addEventListener("touchstart", () => player.move(5, 0));
+      const startMoving = (dx, dy) => {
+        moveInterval = setInterval(() => player.move(dx, dy), 50);
+      };
+
+      const stopMoving = () => {
+        clearInterval(moveInterval);
+      };
+
+      leftButton.addEventListener("touchstart", () => startMoving(-5, 0));
+      rightButton.addEventListener("touchstart", () => startMoving(5, 0));
+      upButton.addEventListener("touchstart", () => startMoving(0, -5));
+      downButton.addEventListener("touchstart", () => startMoving(0, 5));
+
+      leftButton.addEventListener("touchend", stopMoving);
+      rightButton.addEventListener("touchend", stopMoving);
+      upButton.addEventListener("touchend", stopMoving);
+      downButton.addEventListener("touchend", stopMoving);
+
       enterButton.addEventListener("touchstart", () => {
         if (rooms[currentRoomIndex].isPlayerInside(player.x, player.y)) {
           window.open(rooms[currentRoomIndex].link, '_blank');
