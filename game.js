@@ -31,18 +31,6 @@ function draw() {
   background(50);
 
   
-  
-  // Display instructions in the middle of the player's screen for the first 15 seconds
-  if (showInstructions && millis() - instructionsTimer < 15000) {
-    fill(255);
-    textSize(20);
-    textAlign(CENTER, TOP);
-    text('Use arrow keys to move. Press SPACE to enter a portal.', width / 2, 30);
-  } else {
-    showInstructions = false;
-  }
-  
-  
   translate(-cameraOffsetX, -cameraOffsetY);
   
   // Draw all rooms
