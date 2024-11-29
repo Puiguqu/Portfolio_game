@@ -1,5 +1,3 @@
-// Include the p5.js library in your HTML file to run this code
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
 
 let player;
 let rooms = [];
@@ -16,11 +14,9 @@ function setup() {
   createCanvas(800, 600);
   player = new Player(width / 5, -100);
 
-  // Load GitHub repositories and spread rooms evenly
   loadGitHubRepositories();
   
 
-  // Add Kaggle profile room
   rooms.push(new Room('Kaggle Profile', 'Visit my Kaggle profile', 'https://www.kaggle.com/seantanjunkit', 0, -300));
 
   
@@ -33,10 +29,8 @@ function draw() {
   
   translate(-cameraOffsetX, -cameraOffsetY);
   
-  // Draw all rooms
   rooms.forEach(room => room.display());
 
-  // Draw player
   player.display();
 
   handleMovement();
@@ -58,31 +52,28 @@ function handleMovement() {
     linkOpened = false;
   }
 
-  if (rooms[currentRoomIndex].isPlayerInside(player.x, player.y) && keyIsDown(32) && !linkOpened) { // Spacebar key code is 32
+  if (rooms[currentRoomIndex].isPlayerInside(player.x, player.y) && keyIsDown(32) && !linkOpened) {
     window.open(rooms[currentRoomIndex].link, '_blank');
     linkOpened = true;
   }
 }
 
 function updateCamera() {
-  // Use lerp to smoothly transition the camera to follow the player
   cameraOffsetX = lerp(cameraOffsetX, player.x - width / 2, 0.1);
   cameraOffsetY = lerp(cameraOffsetY, player.y - height / 2, 0.1);
 }
 
 function loadGitHubRepositories() {
-  // Fetch data from GitHub API
   fetch('https://api.github.com/users/Puiguqu/repos')
     .then(response => response.json())
     .then(data => {
       const roomCount = data.length;
-      const spacingX = 200; // Fixed distance between portals
-      // Starting x position is now handled in the x calculation directly
+      const spacingX = 200; 
       let index = 0;
 
       data.forEach(repo => {
-        const x = 400 + index * 200; // Evenly space portals to the right of the initial portal
-        const y = -300; // Alternate y position to prevent overlap
+        const x = 400 + index * 200;
+        const y = -300;
         rooms.push(new Room(repo.name, repo.description, repo.html_url, x, y));
         index++;
       });
@@ -97,7 +88,6 @@ class Player {
   }
 
   move(dx, dy) {
-    // Update player position without boundaries
     this.x += dx;
     this.y += dy;
     this.checkRoomInteraction();
